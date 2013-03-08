@@ -1,1 +1,0 @@
-java -jar "C:\Users\camomot\Documents\NetBeansProjects\tbot1\dist\tbot1.jar"

@@ -1,0 +1,223 @@
+[
+  
+  //I
+  [
+    {
+      representation: ["1111"],
+      width: 4,
+      height: 1,
+      offset: 3,
+      name: "I0"
+    },
+    {
+      representation: ["1", "1", "1", "1"],
+      width: 1,
+      height: 4,
+      offset: 5,
+      name: "I1"
+    }
+  ],
+
+  //T
+  [{
+      representation: [
+        "010",
+        "111"
+      ],
+      width: 3,
+      height: 2,
+      offset: 3,
+      name: "T0"
+    },
+    {
+      representation: [
+        "10",
+        "11",
+        "10"
+      ],
+      width: 2,
+      height: 3,
+      offset: 4,
+      name: "T1"
+    },
+    {
+      representation: [
+        "111",
+        "010"
+      ],
+      width: 3,
+      height: 2,
+      offset: 3,
+      name: "T2"
+    },
+    {
+      representation: [
+        "01",
+        "11",
+        "01"
+      ],
+      width: 2,
+      height: 3,
+      offset: 3,
+      name: "T3"
+    }
+  ],
+
+  //O
+  [
+    {
+      representation: [
+        "11",
+        "11"
+      ],
+      width: 2,
+      height: 2,
+      offset: 4,
+      name: "O0"
+    }
+  ],
+
+  //J
+  [
+    {
+      representation: [
+        "100",
+        "111"
+      ],
+      width: 3,
+      height: 2,
+      offset: 3,
+      name: "J0"
+    },
+    {
+      representation: [
+        "11",
+        "10",
+        "10"
+      ],
+      width: 2,
+      height: 3,
+      offset: 4,
+      name:"J1"
+    },
+    {
+      representation: [
+        "111",
+        "001"
+      ],
+      width: 3,
+      height: 2,
+      offset: 3,
+      name:"J2"
+    },
+    {
+      representation: [
+        "01",
+        "01",
+        "11"
+      ],
+      width: 2,
+      height: 3,
+      offset: 3,
+      name:"J3"
+    }
+  ],
+
+  //L
+  [
+    {
+      representation: [
+        "001",
+        "111"
+      ],
+      width: 3,
+      height: 2,
+      offset: 3,
+      name:"L0"
+    },
+    {
+      representation: [
+        "10",
+        "10",
+        "11"
+      ],
+      width: 2,
+      height: 3,
+      offset: 4,
+      name:"L1"
+    },
+    {
+      representation: [
+        "111",
+        "100"
+      ],
+      width: 3,
+      height: 2,
+      offset: 3,
+      name:"L2"
+    },
+    {
+      representation: [
+        "11",
+        "01",
+        "01"
+      ],
+      width: 2,
+      height: 3,
+      offset: 3,
+      name:"L3"
+    }
+
+  ],
+
+  //S
+  [
+    {
+      representation: [
+        "011",
+        "110"
+      ],
+      width: 3,
+      height: 2,
+      offset: 3,
+      name:"S1"
+    },
+    {
+      representation: [
+        "10",
+        "11",
+        "01"
+      ],
+      width: 2,
+      height: 3,
+      offset: 4,
+      name:"S2"
+    }
+
+  ],
+
+  //Z
+  [
+    {
+      representation: [
+        "110",
+        "011"
+      ],
+      width: 3,
+      height: 2,
+      offset: 3,
+      name:"Z1"
+    },
+    {
+      representation: [
+        "01",
+        "11",
+        "10"
+      ],
+      width: 2,
+      height: 3,
+      offset: 4,
+      name:"Z2"
+    }
+  ]
+]

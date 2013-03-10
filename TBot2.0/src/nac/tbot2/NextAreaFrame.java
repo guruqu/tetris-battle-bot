@@ -10,14 +10,14 @@ import java.awt.Rectangle;
  *
  * @author nathaniel
  */
-public class BoardFrame extends javax.swing.JFrame {
+public class NextAreaFrame extends javax.swing.JFrame {
 
     private BoardWatcher boardWatcher;
 
     /**
-     * Creates new form BoardFrame
+     * Creates new form NextAreaFrame
      */
-    public BoardFrame() {
+    public NextAreaFrame() {
         initComponents();
     }
 
@@ -38,16 +38,8 @@ public class BoardFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent evt) {
-                formWindowClosed(evt);
-            }
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
-            }
-        });
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentHidden(java.awt.event.ComponentEvent evt) {
-                formComponentHidden(evt);
             }
         });
 
@@ -55,11 +47,11 @@ public class BoardFrame extends javax.swing.JFrame {
         measurePanel1.setLayout(measurePanel1Layout);
         measurePanel1Layout.setHorizontalGroup(
             measurePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 222, Short.MAX_VALUE)
+            .addGap(0, 74, Short.MAX_VALUE)
         );
         measurePanel1Layout.setVerticalGroup(
             measurePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 276, Short.MAX_VALUE)
+            .addGap(0, 112, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -73,7 +65,7 @@ public class BoardFrame extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(measurePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -82,20 +74,10 @@ public class BoardFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void formComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentHidden
-    }//GEN-LAST:event_formComponentHidden
-
-    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-
-    }//GEN-LAST:event_formWindowClosed
-
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        boardWatcher.setBounds(new Rectangle(measurePanel1.getLocationOnScreen(), measurePanel1.getSize()));
-        this.setVisible(false);
+        boardWatcher.setNextAreaBounds(new Rectangle(measurePanel1.getLocationOnScreen(), measurePanel1.getSize()));
+        setVisible(false);
     }//GEN-LAST:event_formWindowClosing
-    /**
-     * @param args the command line arguments
-     */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private nac.tbot2.MeasurePanel measurePanel1;
     // End of variables declaration//GEN-END:variables

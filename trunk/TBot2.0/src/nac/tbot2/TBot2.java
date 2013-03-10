@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -22,9 +23,16 @@ public class TBot2 extends javax.swing.JFrame {
     private BoardFrame boardFrame = new BoardFrame();
     private NextAreaFrame nextAreaFrame = new NextAreaFrame();
     private BoardWatcher boardWatcher = new BoardWatcher();
-    private Gson gson = new Gson();
-    private static final String SAVE_FILE = "save";
     private Preferences preferences = Preferences.userNodeForPackage(TBot2.class);
+    private static final String PREF_BOARD_BOUNDS = "PREF_BOARD_BOUNDS";
+    private static final String PREF_NEXT_AREA_BOUNDS = "PREF_NEXT_AREA_BOUNDS";
+    public static final String PREF_I = "PREF_I";
+    public static final String PREF_T = "PREF_T";
+    public static final String PREF_O = "PREF_O";
+    public static final String PREF_J = "PREF_J";
+    public static final String PREF_L = "PREF_L";
+    public static final String PREF_S = "PREF_S";
+    public static final String PREF_Z = "PREF_Z";
 
     /**
      * Creates new form TBot2
@@ -40,8 +48,12 @@ public class TBot2 extends javax.swing.JFrame {
             }
 
             @Override
-            public void onNextAreaChange(Integer[] aveColor) {
-                System.out.println("onNextAreaChange" + aveColor);
+            public void onNextAreaChange(int[] aveColor) {
+                System.out.println("change");
+                Object[] options = {"I", "T", "O", "J", "L", "S", "Z"};
+                int n = JOptionPane.showOptionDialog(rootPane, "Test", "Test", JOptionPane.YES_NO_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE, null, options, null);
+                System.out.println("n:" + n);
             }
         });
     }
@@ -57,6 +69,8 @@ public class TBot2 extends javax.swing.JFrame {
 
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -82,6 +96,20 @@ public class TBot2 extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setText("Start");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Stop");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -90,7 +118,11 @@ public class TBot2 extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton4)))
                 .addContainerGap(261, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -100,13 +132,18 @@ public class TBot2 extends javax.swing.JFrame {
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
-                .addContainerGap(237, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 203, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(jButton4))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -117,6 +154,7 @@ public class TBot2 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -128,8 +166,8 @@ public class TBot2 extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
-            preferences.putByteArray("nextAreaBounds", TBotUtils.serialize(boardWatcher.getNextAreaBounds()));
-            preferences.putByteArray("bounds", TBotUtils.serialize(boardWatcher.getBounds()));
+            preferences.putByteArray(PREF_NEXT_AREA_BOUNDS, TBotUtils.serialize(boardWatcher.getNextAreaBounds()));
+            preferences.putByteArray(PREF_BOARD_BOUNDS, TBotUtils.serialize(boardWatcher.getBounds()));
         } catch (Exception ex) {
             Logger.getLogger(TBot2.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -137,19 +175,21 @@ public class TBot2 extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         try {
-            byte[] d = preferences.getByteArray("nextAreaBounds", null);
-            Rectangle rect = null;
+            byte[] d = preferences.getByteArray(PREF_NEXT_AREA_BOUNDS, null);
+            Rectangle rect;
             if (d != null) {
                 rect = (Rectangle) TBotUtils.deserialize(d);
                 if (rect != null) {
+                    System.out.println("rect:" + rect);
                     boardWatcher.setNextAreaBounds(rect);
                 }
             }
 
-            d = preferences.getByteArray("bounds", null);
+            d = preferences.getByteArray(PREF_BOARD_BOUNDS, null);
             if (d != null) {
                 rect = (Rectangle) TBotUtils.deserialize(d);
                 if (rect != null) {
+                    System.out.println("rect:" + rect);
                     boardWatcher.setBounds(rect);
                 }
 
@@ -159,6 +199,14 @@ public class TBot2 extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formWindowOpened
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        boardWatcher.start();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        boardWatcher.stop();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -166,7 +214,8 @@ public class TBot2 extends javax.swing.JFrame {
 
         JFrame.setDefaultLookAndFeelDecorated(true);
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new TBot2().setVisible(true);
             }
@@ -175,5 +224,7 @@ public class TBot2 extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     // End of variables declaration//GEN-END:variables
 }

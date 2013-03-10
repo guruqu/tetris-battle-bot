@@ -106,7 +106,6 @@ public class BoardWatcher {
                     int py = i * nextAreaGridHeight + (nextAreaGridHeight / 2);
 
                     int rgb = nextAreaImage.getRGB(px, py);
-                    System.out.println("n" + n);
                     n[i] = (n[i] == null ? 0 : n[i]) + rgb;
                 }
 
@@ -134,7 +133,8 @@ public class BoardWatcher {
             }
             board[rows - i - 1] = Integer.reverse(Integer.parseInt(rowStr, 2));
         }
-        if (Arrays.deepEquals(n, nextAreaColor)) {
+
+        if (!Arrays.deepEquals(n, nextAreaColor)) {
             if (boardListener != null) {
                 boardListener.onNextAreaChange(n);
             }

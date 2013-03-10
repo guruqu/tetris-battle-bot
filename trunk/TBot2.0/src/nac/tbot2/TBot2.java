@@ -4,6 +4,15 @@
  */
 package nac.tbot2;
 
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
@@ -15,6 +24,9 @@ public class TBot2 extends javax.swing.JFrame {
     private BoardFrame boardFrame = new BoardFrame();
     private NextAreaFrame nextAreaFrame = new NextAreaFrame();
     private BoardWatcher boardWatcher = new BoardWatcher();
+    private Gson gson = new Gson();
+    private static final String SAVE_FILE = "save";
+
     /**
      * Creates new form TBot2
      */
@@ -22,6 +34,17 @@ public class TBot2 extends javax.swing.JFrame {
         initComponents();
         boardFrame.setBoardWatcher(boardWatcher);
         nextAreaFrame.setBoardWatcher(boardWatcher);
+        boardWatcher.setBoardListener(new BoardListener() {
+            @Override
+            public void onPieceEntered() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public void onNextAreaChange(Integer[] aveColor) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        });
     }
 
     /**
@@ -44,6 +67,11 @@ public class TBot2 extends javax.swing.JFrame {
         jButton9 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jButton1.setText("Set Board");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -146,6 +174,21 @@ public class TBot2 extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        try {
+            URL url = TBot2.class.getClass().getResource(SAVE_FILE);
+            System.out.println("urls:" + url);
+            JsonWriter jw = new JsonWriter(new FileWriter(url.getFile()));
+            Map map = new HashMap();
+            map.put("nextAreaBounds", boardWatcher.getNextAreaBounds());
+            map.put("bounds", boardWatcher.getBounds());
+            gson.toJson(map, Map.class, jw);
+            System.out.println("Write");
+        } catch (IOException ex) {
+            Logger.getLogger(TBot2.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

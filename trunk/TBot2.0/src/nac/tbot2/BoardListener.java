@@ -9,5 +9,8 @@ package nac.tbot2;
  * @author nathaniel
  */
 public interface BoardListener {
+
     public void onPieceEntered();
+
+    public void onNextAreaChange(Integer[] aveColor);
 }

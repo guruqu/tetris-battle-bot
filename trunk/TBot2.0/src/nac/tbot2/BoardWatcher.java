@@ -8,6 +8,7 @@ import java.awt.AWTException;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -19,16 +20,23 @@ import java.util.logging.Logger;
  */
 public class BoardWatcher {
 
-    private Rectangle nextAreaBounds;
+    private Robot robot;
+    private BoardListener boardListener;
+    private Timer timer;
+    //
     private Rectangle bounds;
     private int rows = 20;
     private int columns = 10;
-    private Robot robot;
     private int gridWidth = 0;
-    private int gridHeight = 10;
-    private Timer timer;
-    private BoardListener boardListener;
+    private int gridHeight = 0;
     private int[] boardColor;
+    //
+    private Rectangle nextAreaBounds;
+    private int nextAreaRows = 2;
+    private int nextAreaColumns = 4;
+    private int nextAreaGridWidth = 0;
+    private int nextAreaGridHeight = 0;
+    private Integer[] nextAreaColor;
 
     public BoardWatcher() {
         try {
@@ -82,26 +90,38 @@ public class BoardWatcher {
 
     public void watch() {
 
-        if (bounds == null) {
+        if (bounds == null || nextAreaBounds == null || robot == null) {
             return;
         }
 
-        if (robot == null) {
-            return;
-        }
-
-        BufferedImage image = robot.createScreenCapture(bounds);
         int[] board = new int[rows];
         int[] b = new int[rows];
-//        System.out.println("BOARD");
+        Integer[] n = new Integer[nextAreaRows];
+
+        BufferedImage nextAreaImage = robot.createScreenCapture(nextAreaBounds);
+        for (int i = 0; i < nextAreaRows; i++) {
+            for (int j = 0; j < nextAreaColumns; j++) {
+                if (nextAreaImage != null) {
+                    int px = j * nextAreaGridWidth + (nextAreaGridWidth / 2);
+                    int py = i * nextAreaGridHeight + (nextAreaGridHeight / 2);
+
+                    int rgb = nextAreaImage.getRGB(px, py);
+                    System.out.println("n" + n);
+                    n[i] = (n[i] == null ? 0 : n[i]) + rgb;
+                }
+
+            }
+        }
+
+        BufferedImage boardImage = robot.createScreenCapture(bounds);
         for (int i = 0; i < rows; i++) {
             String rowStr = "";
             for (int j = 0; j < columns; j++) {
-                if (image != null) {
+                if (boardImage != null) {
                     int px = j * gridWidth + (gridWidth / 2);
                     int py = i * gridHeight + (gridHeight / 2);
 
-                    int rgb = image.getRGB(px, py);
+                    int rgb = boardImage.getRGB(px, py);
                     b[i] += rgb;
                     Tetramino[] piece = TetraminoFactory.get(rgb);
                     if (piece == null) {
@@ -112,12 +132,21 @@ public class BoardWatcher {
                 }
 
             }
-//            System.out.println(rows - i + " " + rowStr);
             board[rows - i - 1] = Integer.reverse(Integer.parseInt(rowStr, 2));
         }
-        if (boardColor != null && b[0] != boardColor[0]) {
-            System.out.println("CHANGE");
+        if (Arrays.deepEquals(n, nextAreaColor)) {
+            if (boardListener != null) {
+                boardListener.onNextAreaChange(n);
+            }
         }
-        boardColor = b;//        System.out.println("BOARD");
+
+        if (boardColor != null && b[0] != boardColor[0]) {
+            if (boardListener != null) {
+                boardListener.onPieceEntered();
+            }
+        }
+
+        nextAreaColor = n;
+        boardColor = b;
     }
 }

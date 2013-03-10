@@ -28,4 +28,13 @@ public class TBotUtils {
         ObjectInputStream o = new ObjectInputStream(b);
         return o.readObject();
     }
+
+    public static boolean arrayEquals(int[] a, int[] b) {
+        for (int i = 0, l = a.length; i < l; i++) {
+            if (a[i] != b[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

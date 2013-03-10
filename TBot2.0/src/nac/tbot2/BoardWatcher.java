@@ -36,7 +36,8 @@ public class BoardWatcher {
     private int nextAreaColumns = 4;
     private int nextAreaGridWidth = 0;
     private int nextAreaGridHeight = 0;
-    private Integer[] nextAreaColor;
+    private int[] nextAreaColor;
+    //
 
     public BoardWatcher() {
         try {
@@ -44,14 +45,29 @@ public class BoardWatcher {
         } catch (AWTException ex) {
             Logger.getLogger(BoardWatcher.class.getName()).log(Level.SEVERE, null, ex);
         }
-        timer = new Timer();
+    }
 
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                watch();
-            }
-        }, 0, 100);
+    public void start() {
+        System.out.println("start");
+        if (timer == null) {
+            timer = new Timer();
+
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    watch();
+                }
+            }, 0, 100);
+        }
+    }
+
+    public void stop() {
+        System.out.println("stop");
+        if (timer != null) {
+            timer.cancel();
+            timer.purge();
+        }
+        timer = null;
     }
 
     public void setBoardListener(BoardListener boardListener) {
@@ -78,6 +94,8 @@ public class BoardWatcher {
 
     public void setNextAreaBounds(Rectangle nextAreaBounds) {
         this.nextAreaBounds = nextAreaBounds;
+        nextAreaGridWidth = nextAreaBounds.width / columns;
+        nextAreaGridHeight = nextAreaBounds.height / rows;
     }
 
     public int getRows() {
@@ -96,7 +114,7 @@ public class BoardWatcher {
 
         int[] board = new int[rows];
         int[] b = new int[rows];
-        Integer[] n = new Integer[nextAreaRows];
+        int[] n = new int[nextAreaRows];
 
         BufferedImage nextAreaImage = robot.createScreenCapture(nextAreaBounds);
         for (int i = 0; i < nextAreaRows; i++) {
@@ -106,7 +124,7 @@ public class BoardWatcher {
                     int py = i * nextAreaGridHeight + (nextAreaGridHeight / 2);
 
                     int rgb = nextAreaImage.getRGB(px, py);
-                    n[i] = (n[i] == null ? 0 : n[i]) + rgb;
+                    n[i] += rgb;
                 }
 
             }
@@ -133,8 +151,7 @@ public class BoardWatcher {
             }
             board[rows - i - 1] = Integer.reverse(Integer.parseInt(rowStr, 2));
         }
-
-        if (!Arrays.deepEquals(n, nextAreaColor)) {
+        if (nextAreaColor != null && !TBotUtils.arrayEquals(n, nextAreaColor)) {
             if (boardListener != null) {
                 boardListener.onNextAreaChange(n);
             }

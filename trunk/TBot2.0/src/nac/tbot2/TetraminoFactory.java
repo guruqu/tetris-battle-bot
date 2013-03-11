@@ -31,11 +31,11 @@ public class TetraminoFactory {
         }
     }
 
-    public static Tetramino[] get(int color) {
-        return map.get(color);
+    public static Tetramino[] get(int colorSum) {
+        return map.get(colorSum);
     }
 
-    public static void set(int type, int color) {
-        map.put(color, MINOS[type]);
+    public static void set(int type, int colorSum) {
+        map.put(colorSum, MINOS[type]);
     }
 }

@@ -5,6 +5,7 @@
 package nac.tbot2;
 
 import java.awt.AWTException;
+import java.awt.Container;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
@@ -13,6 +14,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -38,8 +40,11 @@ public class BoardWatcher {
     private int nextAreaGridHeight = 0;
     private int[] nextAreaColor;
     //
+    private Container pane;
+    private boolean optionAsking = false;
 
-    public BoardWatcher() {
+    public BoardWatcher(Container pane) {
+        this.pane = pane;
         try {
             robot = new Robot();
         } catch (AWTException ex) {
@@ -48,6 +53,7 @@ public class BoardWatcher {
     }
 
     public void start() {
+        stopCalibration();
         System.out.println("start");
         if (timer == null) {
             timer = new Timer();
@@ -63,6 +69,30 @@ public class BoardWatcher {
 
     public void stop() {
         System.out.println("stop");
+        if (timer != null) {
+            timer.cancel();
+            timer.purge();
+        }
+        timer = null;
+    }
+
+    public void startCalibration() {
+        stop();
+        System.out.println("start calibration");
+        if (timer == null) {
+            timer = new Timer();
+
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    calibrate();
+                }
+            }, 0, 100);
+        }
+    }
+
+    public void stopCalibration() {
+        System.out.println("stop calibration");
         if (timer != null) {
             timer.cancel();
             timer.purge();
@@ -98,6 +128,14 @@ public class BoardWatcher {
         nextAreaGridHeight = nextAreaBounds.height / rows;
     }
 
+    public void setRows(int rows) {
+        this.rows = rows;
+    }
+
+    public void setColumns(int columns) {
+        this.columns = columns;
+    }
+
     public int getRows() {
         return rows;
     }
@@ -106,7 +144,7 @@ public class BoardWatcher {
         return columns;
     }
 
-    public void watch() {
+    private void watch() {
 
         if (bounds == null || nextAreaBounds == null || robot == null) {
             return;
@@ -153,7 +191,7 @@ public class BoardWatcher {
         }
         if (nextAreaColor != null && !TBotUtils.arrayEquals(n, nextAreaColor)) {
             if (boardListener != null) {
-                boardListener.onNextAreaChange(n);
+                boardListener.onNextAreaChange(TBotUtils.sumArray(n));
             }
         }
 
@@ -165,5 +203,42 @@ public class BoardWatcher {
 
         nextAreaColor = n;
         boardColor = b;
+    }
+
+    public void calibrate() {
+        if (optionAsking) {
+            return;
+        }
+        if (nextAreaBounds == null || robot == null) {
+            return;
+        }
+
+        int[] n = new int[nextAreaRows];
+        BufferedImage nextAreaImage = robot.createScreenCapture(nextAreaBounds);
+        for (int i = 0; i < nextAreaRows; i++) {
+            for (int j = 0; j < nextAreaColumns; j++) {
+                if (nextAreaImage != null) {
+                    int px = j * nextAreaGridWidth + (nextAreaGridWidth / 2);
+                    int py = i * nextAreaGridHeight + (nextAreaGridHeight / 2);
+
+                    int rgb = nextAreaImage.getRGB(px, py);
+                    n[i] += rgb;
+                }
+
+            }
+        }
+        System.out.println("calibrate" + Arrays.toString(n));
+        if (nextAreaColor != null && !TBotUtils.arrayEquals(n, nextAreaColor)) {
+            optionAsking = true;
+            Object[] options = {"I", "T", "O", "J", "L", "S", "Z"};
+            int o = JOptionPane.showOptionDialog(pane, "Test", "Test", JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null, options, null);
+            System.out.println("n:" + o);
+            optionAsking = false;
+            if (o != -1) {
+                TetraminoFactory.set(o, TBotUtils.sumArray(n));
+            }
+        }
+        nextAreaColor = n;
     }
 }

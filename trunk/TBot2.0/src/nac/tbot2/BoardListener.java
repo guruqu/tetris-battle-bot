@@ -12,5 +12,5 @@ public interface BoardListener {
 
     public void onPieceEntered();
 
-    public void onNextAreaChange(int[] aveColor);
+    public void onNextAreaChange(int colorSum);
 }

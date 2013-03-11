@@ -17,7 +17,7 @@ public class TetraminoFactory {
 
     private static Tetramino[][] MINOS;
     private static final TetraminoFactory INSTANCE = new TetraminoFactory();
-    private static final String MINOS_FILE = "tetraminos.json";
+    private static final String MINOS_FILE = "tetraminos";
     private static final Map<Integer, Tetramino[]> map = new HashMap<>(7);
 
     private TetraminoFactory() {

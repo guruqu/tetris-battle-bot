@@ -23,14 +23,14 @@ function gcVideoMain(video_url, flashEmbedCallback, container) {
     var id;
     if ((id = extractYoutubeId(video_url))) {
       // &rel=0 disables the mouseover for related videos.
-      flashEmbedCallback("http://www.youtube.com/v/" + id + "&rel=0", "video", 8);
+      flashEmbedCallback("https://www.youtube.com/v/" + id + "&rel=0", "video", 8);
     } else if ((id = extractGoogleVideoDocid(video_url))) {
       flashEmbedCallback(
-          "http://video.google.com/googleplayer.swf?docid=" + id + "&hl=en&fs=true",
+          "https://video.google.com/googleplayer.swf?docid=" + id + "&hl=en&fs=true",
           "video", 8);
     } else if ((id = extractVimeoId(video_url))) {
       flashEmbedCallback(
-          "http://vimeo.com/moogaloop.swf?clip_id=" + id + "&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;fullscreen=1",
+          "https://vimeo.com/moogaloop.swf?clip_id=" + id + "&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;fullscreen=1",
           "video", 8);
     } else {
       // TODO: video_url should be HTML escaped.

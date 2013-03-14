@@ -10,7 +10,7 @@
     <update check="always"/>
     <resources>
         <j2se version="1.7+"/>
-        <jar href="JavaApplication5.jar" main="true"/>
+        <jar href="https://tetris-battle-bot.googlecode.com/files/JavaApplication5.jar" main="true"/>
     </resources>
     <applet-desc height="300" main-class="javaapplication5.Main" name="JavaApplication5" width="300">
     </applet-desc>

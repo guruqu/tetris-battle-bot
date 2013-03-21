@@ -1,0 +1,47 @@
+
+*{
+    font-family: verdana,arial,sans-serif;
+    font-size:11px;
+    color:#333333;
+}
+
+table  {
+    border-width: 1px;
+    border-color: #666666;
+    border-collapse: collapse;
+}
+table  th {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #666666;
+    background-color: #dedede;
+}
+table  td {
+    height:106px;
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #666666;
+    background-color: #ffffff;
+}
+
+#gameState{
+    margin:10px;
+}
+#controls{
+    margin:10px;
+}
+
+
+.loss td{
+    background-color:red;
+}
+
+.win td{
+    background-color:green;
+}
+
+.turn td{
+    background-color:yellow;
+}

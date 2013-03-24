@@ -17,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
@@ -231,7 +232,7 @@ public class TFrame1 extends javax.swing.JFrame {
       java.util.logging.Logger.getLogger(TFrame1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
     }
     //</editor-fold>
-
+    JFrame.setDefaultLookAndFeelDecorated(true);
     /*
      * Create and display the form
      */

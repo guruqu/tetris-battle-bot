@@ -27,34 +27,28 @@ import javax.swing.Timer;
  */
 public class TFrame1 extends javax.swing.JFrame {
 
-  private boolean findingBoard = false;
   private Timer timer;
-  private Robot robot = null;
+  private BoardFrame boardFrame;
 
   /**
    * Creates new form TFrame
    */
   public TFrame1() {
     initComponents();
-    try {
-      robot = new Robot();
-    } catch (AWTException ex) {
-      Logger.getLogger(TFrame1.class.getName()).log(Level.SEVERE, null, ex);
-    }
+    boardFrame = new BoardFrame();
     tPanel2.setDelayTextField(jTextField2);
     tPanel2.setTowerGapTextField(jTextField3);
     tPanel2.setBuildLimitTextField(jTextField4);
     tPanel2.setBreakLimitTextField(jTextField5);
-
+    boardFrame.settPanel(tPanel2);
+    
     timer = new Timer(30, new ActionListener() {
-
       @Override
       public void actionPerformed(ActionEvent e) {
         tPanel2.repaint();
       }
     });
-
-    Toolkit.getDefaultToolkit().addAWTEventListener(new AWTFocusListener(), AWTEvent.MOUSE_EVENT_MASK | AWTEvent.FOCUS_EVENT_MASK);
+    boardFrame.setTimer(timer);
   }
 
   /**
@@ -186,12 +180,15 @@ public class TFrame1 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
   private void findBoardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findBoardButtonActionPerformed
+    EventQueue.invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        boardFrame.setOpacity(0.5f);
+        boardFrame.setVisible(true);
 
-    if (findingBoard == false) {
-      timer.stop();
-      findingBoard = true;
-      findBoardButton.setText("Click inside board...");
-    }
+      }
+    });
+    timer.stop();
   }//GEN-LAST:event_findBoardButtonActionPerformed
 
   private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
@@ -209,35 +206,12 @@ public class TFrame1 extends javax.swing.JFrame {
     /*
      * Set the Nimbus look and feel
      */
-    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /*
-     * If Nimbus (introduced in Java SE 6) is not available, stay with the
-     * default look and feel. For details see
-     * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-     */
-    try {
-      for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-        if ("Nimbus".equals(info.getName())) {
-          javax.swing.UIManager.setLookAndFeel(info.getClassName());
-          break;
-        }
-      }
-    } catch (ClassNotFoundException ex) {
-      java.util.logging.Logger.getLogger(TFrame1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (InstantiationException ex) {
-      java.util.logging.Logger.getLogger(TFrame1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (IllegalAccessException ex) {
-      java.util.logging.Logger.getLogger(TFrame1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-      java.util.logging.Logger.getLogger(TFrame1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    }
-    //</editor-fold>
+
     JFrame.setDefaultLookAndFeelDecorated(true);
     /*
      * Create and display the form
      */
     java.awt.EventQueue.invokeLater(new Runnable() {
-
       @Override
       public void run() {
         new TFrame1().setVisible(true);
@@ -257,73 +231,4 @@ public class TFrame1 extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField5;
     private nac.tbot.TPanel tPanel2;
     // End of variables declaration//GEN-END:variables
-
-  private class AWTFocusListener implements AWTEventListener {
-
-    @Override
-    public void eventDispatched(AWTEvent event) {
-      if (event.getID() == FocusEvent.FOCUS_LAST) {
-        if (findingBoard) {
-          SwingUtilities.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-              findBorders();
-            }
-          });
-
-        }
-      }
-    }
-  }
-
-  private void findBorders() {
-    findBoardButton.setText("Finding...");
-    Point initialPoint = MouseInfo.getPointerInfo().getLocation();
-    int ix = initialPoint.x;
-    int iy = initialPoint.y;
-    int x = 0;
-    int y = 0;
-    Color color;
-    int blackCount = 0;
-
-    while (ix > 0) {
-
-      color = robot.getPixelColor(ix, iy);
-
-      if (color.equals(Color.BLACK)) {
-        blackCount++;
-      } else {
-        blackCount = 0;
-      }
-      if (blackCount == 6) {
-        x = ix;
-        break;
-      }
-      ix--;
-    }
-
-    ix = initialPoint.x;
-    iy = initialPoint.y;
-    blackCount = 0;
-    while (iy > 0) {
-
-      color = robot.getPixelColor(ix, iy);
-
-      if (color.equals(Color.BLACK)) {
-        blackCount++;
-      } else {
-        blackCount = 0;
-      }
-      if (blackCount == 6) {
-        y = iy;
-        break;
-      }
-      iy--;
-    }
-    findingBoard = false;
-    tPanel2.setLoc(new Point(x + 6, y + 8));
-    timer.start();
-    findBoardButton.setText("Find board");
-  }
 }

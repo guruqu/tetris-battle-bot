@@ -20,13 +20,12 @@ public class TPanel extends JPanel {
   private final int lightBlack = new Color(47, 47, 47).getRGB();
   private final int lightestBlack = new Color(77, 77, 77).getRGB();
   private final int darkBlack = new Color(43, 43, 43).getRGB();
-  private final int partida1 = new Color(56, 56, 56).getRGB();
-  private final int partida2 = new Color(79, 79, 79).getRGB();
+
   private Robot robot;
   private Rectangle rect;
   private TState state = TState.STANDBY;
   private Keyboard keyboard = new Keyboard();
-  private Bot2 bot = new Bot2();
+  private BotImpl bot = new BotImpl();
   private int newPieceRGB;
   private int hold = -1;
   private int current = -1;
@@ -121,7 +120,7 @@ public class TPanel extends JPanel {
       state = TState.STARTED;
       hold = -1;
       pressedShift = false;
-      bot = new Bot2();
+      bot = new BotImpl();
       keyboard.setDelay(Integer.parseInt(delayTextField.getText()));
       bot.setTowerGap(Integer.parseInt(towerGapTextField.getText()));
       bot.setBuildUpLimit(Integer.parseInt(buildLimitTextField.getText()));
@@ -144,8 +143,8 @@ public class TPanel extends JPanel {
           boolean lrc = lastRowsRemoved > 0;
           if (pressedShift == false) {
 
-            move1 = bot.move(new Board(board, 19, 10), current);
-            move2 = bot.move(new Board(board, 19, 10), hold);
+            move1 = bot.move(new Board(board, 19, 10), current, lrc);
+            move2 = bot.move(new Board(board, 19, 10), hold, lrc);
 
             if (move1 != null && move2 != null && move1.getScore() >= move2.getScore()) {
               finalMove = move1;
@@ -158,7 +157,7 @@ public class TPanel extends JPanel {
               finalMove = move2;
             }
           } else {
-            finalMove = bot.move(new Board(board, 19, 10), current);
+            finalMove = bot.move(new Board(board, 19, 10), current, lrc);
           }
 
           if (finalMove != null) {
@@ -194,7 +193,7 @@ public class TPanel extends JPanel {
         state = TState.STARTED;
         hold = -1;
         pressedShift = false;
-        bot = new Bot2();
+        bot = new BotImpl();
         keyboard.setDelay(Integer.parseInt(delayTextField.getText()));
         keyboard.setDelay(Integer.parseInt(delayTextField.getText()));
         bot.setTowerGap(Integer.parseInt(towerGapTextField.getText()));

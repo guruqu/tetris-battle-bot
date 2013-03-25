@@ -6,7 +6,7 @@ package watchmaker;
 
 import nac.tbot.Board;
 import nac.tbot.Bot;
-import nac.tbot.Bot2;
+import nac.tbot.BotImpl;
 import nac.tbot.Move;
 import org.uncommons.maths.random.MersenneTwisterRNG;
 
@@ -24,7 +24,7 @@ public class WatchMaker {
     for (int tg = 0; tg < 5; tg++) {
       for (int bul = 0; bul < 18; bul++) {
         for (int bdl = 0; bdl < 18; bdl++) {
-          Bot2 bot = new Bot2();
+          BotImpl bot = new BotImpl();
           bot.setBreakDownLimit(bdl);
           bot.setBuildUpLimit(bul);
           bot.setTowerGap(tg);
@@ -52,7 +52,7 @@ public class WatchMaker {
       int comboCount = 0;
       for (int i = 0; i < 400; i++) {
         int piece = rng.nextInt(7);
-        Move move = bot.move(board, piece);
+        Move move = bot.move(board, piece, true);
         if (move != null) {
           int rowsRemoved = move.getRowsRemoved();
           if (rowsRemoved == 4) {

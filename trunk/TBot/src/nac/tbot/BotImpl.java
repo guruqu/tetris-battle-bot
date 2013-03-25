@@ -5,9 +5,9 @@ public class BotImpl implements Bot {
   private final int BUILDUP = 1;
   private final int BREAKDOWN = 2;
   private int phase = BUILDUP;
-  private int breakDownLimit;
-  private int buildUpLimit;
-  private int towerGap;
+  private int breakDownLimit = 5;
+  private int buildUpLimit = 15;
+  private int towerGap = 2;
 
   @Override
   public Move move(Board board, int currentMino, boolean lrc) {
@@ -29,7 +29,6 @@ public class BotImpl implements Bot {
     } else if (phase == BREAKDOWN && board.getBoardHeight() <= breakDownLimit) {
       phase = BUILDUP;
     }
-
     for (int i = 0; i < cvarlen; i++) {
       for (int c = 0; c < columns - cvar[i].getWidth() + 1; c++) {
 
@@ -37,13 +36,7 @@ public class BotImpl implements Bot {
         Board newBoard1 = board.apply(move1);
         if (!move1.isGameOver()) {
 
-
-//          if (phase == BUILDUP) {
             evaluation = newBoard1.evaluate() + move1.evaluate();
-//          } else {
-//            evaluation = newBoard1.evaluate() + move1.evaluate(board.getBoardHeight(), lrc, breakDownLimit);
-//          }
-
 
           if (evaluation > best_evaluation) {
             best_evaluation = evaluation;
@@ -71,7 +64,8 @@ public class BotImpl implements Bot {
   public void setTowerGap(int towerGap) {
     this.towerGap = towerGap;
   }
-//  public int getPhase() {
-//    return phase;
-//  }
+  
+  public void clear(){
+    phase = BUILDUP;
+  }
 }

@@ -15,27 +15,39 @@ import java.util.Map;
  */
 public class TetraminoFactory {
 
-    private static Tetramino[][] MINOS;
-    private static final TetraminoFactory INSTANCE = new TetraminoFactory();
-    private static final String MINOS_FILE = "tetraminos";
-    private static final Map<Integer, Tetramino[]> map = new HashMap<>(7);
+  private static Tetramino[][] MINOS;
+  private static final TetraminoFactory INSTANCE = new TetraminoFactory();
+  private static final String MINOS_FILE = "tetraminos";
+  private static Map<Integer, Tetramino[]> map = new HashMap<>(7);
 
-    private TetraminoFactory() {
-        Gson gson = new Gson();
-        MINOS = gson.fromJson(new InputStreamReader(TetraminoFactory.class.getResourceAsStream(MINOS_FILE)), Tetramino[][].class);
-        for (int i = 0; i < MINOS.length; i++) {
-            Tetramino[] t = MINOS[i];
-            for (int j = 0; j < t.length; j++) {
-                t[j].translate();
-            }
-        }
+  private TetraminoFactory() {
+    Gson gson = new Gson();
+    MINOS = gson.fromJson(new InputStreamReader(TetraminoFactory.class.getResourceAsStream(MINOS_FILE)), Tetramino[][].class);
+    for (int i = 0; i < MINOS.length; i++) {
+      Tetramino[] t = MINOS[i];
+      for (int j = 0; j < t.length; j++) {
+        t[j].translate();
+      }
     }
+  }
 
-    public static Tetramino[] get(int colorSum) {
-        return map.get(colorSum);
-    }
+  public static Tetramino[] get(int colorSum) {
+    return map.get(colorSum);
+  }
 
-    public static void set(int type, int colorSum) {
-        map.put(colorSum, MINOS[type]);
-    }
+  public static Map<Integer, Tetramino[]> getMap() {
+    return map;
+  }
+
+  public static void setMap(Map<Integer, Tetramino[]> m) {
+    map = m;
+  }
+
+  public static void set(int type, int colorSum) {
+    map.put(colorSum, MINOS[type]);
+  }
+
+  public static void clear() {
+    map.clear();
+  }
 }

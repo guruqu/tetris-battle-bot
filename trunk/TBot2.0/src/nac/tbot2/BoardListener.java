@@ -12,5 +12,5 @@ public interface BoardListener {
 
     public void onPieceEntered();
 
-    public void onNextAreaChange(int colorSum);
+    public void onNextAreaChange(Tetramino[] tetramino);
 }

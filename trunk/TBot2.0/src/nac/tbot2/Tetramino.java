@@ -4,14 +4,15 @@
  */
 package nac.tbot2;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
  *
  * @author DTIT
  */
-public class Tetramino {
-
+public class Tetramino implements Serializable{
+  
     private String[] representation;
     private int[] data = null;
     private int width;

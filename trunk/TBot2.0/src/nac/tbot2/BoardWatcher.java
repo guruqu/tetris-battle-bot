@@ -10,6 +10,7 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -42,7 +43,8 @@ public class BoardWatcher {
     //
     private Container pane;
     private boolean optionAsking = false;
-
+    private List<String> options = Arrays.asList("I", "T", "O", "J", "L", "S", "Z");
+    
     public BoardWatcher(Container pane) {
         this.pane = pane;
         try {
@@ -89,6 +91,7 @@ public class BoardWatcher {
                 }
             }, 0, 100);
         }
+        TetraminoFactory.clear();
     }
 
     public void stopCalibration() {
@@ -191,7 +194,7 @@ public class BoardWatcher {
         }
         if (nextAreaColor != null && !TBotUtils.arrayEquals(n, nextAreaColor)) {
             if (boardListener != null) {
-                boardListener.onNextAreaChange(TBotUtils.sumArray(n));
+                boardListener.onNextAreaChange(TetraminoFactory.get(TBotUtils.sumArray(n)));
             }
         }
 
@@ -230,12 +233,11 @@ public class BoardWatcher {
         System.out.println("calibrate" + Arrays.toString(n));
         if (nextAreaColor != null && !TBotUtils.arrayEquals(n, nextAreaColor)) {
             optionAsking = true;
-            Object[] options = {"I", "T", "O", "J", "L", "S", "Z"};
             int o = JOptionPane.showOptionDialog(pane, "Test", "Test", JOptionPane.YES_NO_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE, null, options, null);
-            System.out.println("n:" + o);
+                    JOptionPane.QUESTION_MESSAGE, null, options.toArray() , null);
             optionAsking = false;
             if (o != -1) {
+                options.set(o, "-" + options.get(o) + "-");
                 TetraminoFactory.set(o, TBotUtils.sumArray(n));
             }
         }

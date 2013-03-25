@@ -38,11 +38,11 @@ public class BotImpl implements Bot {
         if (!move1.isGameOver()) {
 
 
-          if (phase == BUILDUP) {
+//          if (phase == BUILDUP) {
             evaluation = newBoard1.evaluate() + move1.evaluate();
-          } else {
-            evaluation = newBoard1.evaluate() + move1.evaluate(board.getBoardHeight(), lrc, buildUpLimit);
-          }
+//          } else {
+//            evaluation = newBoard1.evaluate() + move1.evaluate(board.getBoardHeight(), lrc, breakDownLimit);
+//          }
 
 
           if (evaluation > best_evaluation) {

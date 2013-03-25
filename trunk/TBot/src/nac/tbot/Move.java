@@ -86,7 +86,7 @@ public class Move {
   }
   
   public double evaluate(int boardHeight, boolean lastMoveRemovedRow, int limit) {
-    if (boardHeight > limit - 5) {
+    if (boardHeight > limit) {
       return getLandingRow() * -4.500158825082766
               + (rowsRemoved) * 3.4181268101392694;
     } else {

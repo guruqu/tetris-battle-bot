@@ -12,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.google.appengine.api.datastore.Key;
+
 /**
  * 
  * @author Administrator
@@ -21,7 +23,7 @@ public class Player {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Key key;
 	private String name = "";
 	private boolean banker = false;
 	private int credit = 0;
@@ -92,7 +94,7 @@ public class Player {
 	public int getScore() {
 		int score = 0;
 		for (Card card : cards) {
-			score += card.getType().value();
+			score += Integer.parseInt(card.toString().split("_")[1]);
 		}
 		String str = score + "";
 		String x = str.substring(str.length() - 1);
@@ -120,8 +122,8 @@ public class Player {
 
 		WIN, LOSS, BETTING, READY, EVEN, HIT, STAND
 	}
-	
-	public Long getId() {
-		return id;
+
+	public Key getKey() {
+		return key;
 	}
 }

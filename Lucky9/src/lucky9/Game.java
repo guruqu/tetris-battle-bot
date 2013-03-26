@@ -16,8 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import lucky9.Card.Suit;
-import lucky9.Card.Type;
+import com.google.appengine.api.datastore.Key;
 
 /**
  * 
@@ -28,7 +27,7 @@ public class Game {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Key key;
 	private List<Player> players = new ArrayList<Player>();
 	private Map<String, Player> playerMap = new HashMap<String, Player>();
 	private List<Card> deck = new ArrayList<Card>(40);
@@ -43,10 +42,8 @@ public class Game {
 
 	private void shuffle() {
 		deck = new ArrayList<Card>(40);
-		for (Suit suit : Suit.values()) {
-			for (Type type : Type.values()) {
-				deck.add(new Card(suit, type));
-			}
+		for (Card card: Card.values()) {
+				deck.add(card);
 		}
 		Collections.shuffle(deck);
 	}
@@ -188,7 +185,7 @@ public class Game {
 		READY, BETTING, TURNS
 	}
 	
-	public Long getId() {
-		return id;
+	public Key getKey() {
+		return key;
 	}
 }

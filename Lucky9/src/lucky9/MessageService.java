@@ -10,7 +10,7 @@ public class MessageService {
 	public static void sendToAllPlayers(Game game, String message){
 	
 		for (Player player : game.getPlayers()) {
-			String channelKey = game.getId() + player.getIp();
+			String channelKey = game.getKey() + player.getIp();
 			channelService.sendMessage(new ChannelMessage(channelKey,
 					message));
 		}

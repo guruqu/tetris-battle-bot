@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module>
- <ModulePrefs
+  <ModulePrefs
     title="Video Player"
     author="Project Hosting Team"
     author_affiliation="Google Inc."
@@ -8,10 +8,10 @@
     author_email="gadgets.feedback@gmail.com"
     width="425"
     height="344">
-   <Require feature="flash"/>
- </ModulePrefs>
- <UserPref name="video" datatype="string" />
- <Content type="html">
+    <Require feature="flash"/>
+  </ModulePrefs>
+  <UserPref name="video" datatype="string" />
+  <Content type="html">
  <![CDATA[
  <script type="text/javascript" src="https://tetris-battle-bot.googlecode.com/svn/trunk/TBot2.0/video.js"></script>
  <script>
@@ -24,5 +24,5 @@
 
  <div id="video"/>
  ]]>
- </Content>
+  </Content>
 </Module>

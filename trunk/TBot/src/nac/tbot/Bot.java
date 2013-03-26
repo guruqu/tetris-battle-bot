@@ -10,6 +10,8 @@ package nac.tbot;
  */
 public interface Bot {
 
-  public Move move(Board board, int currentMino, boolean lrc);
+    public Move move(Board board, int currentMino, boolean lrc);
+    
+    public Move[] move(Board board, int currentMino, int nextMino, boolean lrc);
   
 }

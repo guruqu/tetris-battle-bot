@@ -1,175 +1,169 @@
-<%-- 
-    Document   : index
-    Created on : Mar 15, 2013, 11:35:18 AM
-    Author     : Administrator
---%>
-
+<%@page import="com.google.appengine.api.channel.ChannelServiceFactory"%>
+<%@page import="com.google.appengine.api.channel.ChannelService"%>
+<%@page import="lucky9.Player"%>
+<%@page import="lucky9.MessageService"%>
+<%@page import="com.google.appengine.api.datastore.KeyFactory"%>
+<%@page import="javax.persistence.EntityManager"%>
 <%@page import="com.google.appengine.api.users.User"%>
 <%@page import="com.google.appengine.api.users.UserService"%>
-<%@page import="com.google.appengine.api.users.UserServiceFactory"%>
-<%@page import="com.google.appengine.api.channel.ChannelService"%>
-<%@page import="com.google.appengine.api.channel.ChannelServiceFactory"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page import="lucky9.Card"%>
-<%@page import="java.util.List"%>
-<%@page import="lucky9.Player"%>
+<%@page import="lucky9.EMFService"%>
 <%@page import="lucky9.Game"%>
+<%@page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-	Game game = (Game) application.getAttribute("GAME");
-  
-	final UserService userService = UserServiceFactory.getUserService();
+	UserService userService = UserServiceFactory.getUserService();
 	User currentUser = userService.getCurrentUser();
-	  Player me = game.getPlayerMap().get(currentUser.getUserId());
-  if (game != null && me != null) {
-%>
+	EntityManager em = EMFService.get().createEntityManager();
+	Game game = null;
+	String token = "";
 
-<table border="2">
-	<tr>
-		<th colspan="2">Player</th>
-		<th>Credit</th>
-		<th>Bet</th>
-		<th>Cards</th>
-		<th>Score</th>
-		<th>Status</th>
-	</tr>
-	<%
-		List<Player> players = game.getPlayers();
-			    for (Player player : players) {
-			      String classes = "";
+	if (currentUser == null) {
+		response.getWriter().println(
+				"<p>Please <a href=\""
+						+ userService.createLoginURL(request
+								.getRequestURL().toString())
+						+ "\">sign in</a>.</p>");
+		return;
+	}
 
-			      if (game.getState() == Game.State.TURNS) {
-			        if (player.isTurn()) {
-			          classes += "turn ";
-			        }
-			      } else if (game.getState() == Game.State.READY) {
-			        if (!player.isBanker()) {
-			          if (player.getStatus() == Player.Status.WIN) {
-			            classes += "win ";
-			          } else if (player.getStatus() == Player.Status.LOSS) {
-			            classes += "loss";
-			          }
-			        }
-			      }
-	%>
-	<tr class="<%=classes%>">
-		<td><c:out value="<%=player.getName()%>" escapeXml="true"></c:out></td>
-		<td>
-			<%
-				if (player.isBanker()) {
-					out.print("Banker");
-				}
-			%>
-		</td>
-		<td>Php <%=player.getCredit()%> <%
- 	if (me.isBanker() && me != player) {
- %> <!--      <button class="set-as-claimed" data-ip="<%=player.getIp()%>">Set As Claimed</button>-->
-			<%
-				}
-			%>
-		</td>
-		<td><%=player.isBanker() ? "" : player.getBet()%></td>
-		<td>
-			<%
-				if (game.getState() == Game.State.TURNS) {
-					          if (player == me) {
-					            for (Card card : player.getCards()) {
-					              out.print("<div style='float:left' class='" + card.toString() + "'></div>");
-					            }
-					          } else {
-					            if (player.getStatus() == Player.Status.HIT) {
-					              Card card = (player.getCards().size() > 2 ? player.getCards().get(2) : null);
-					              out.print("<div style='float:left' class='" + card.toString() + "'></div>");
-					            }
-					          }
-					        } else{
-					          for (Card card : player.getCards()) {
-					            out.print("<div style='float:left' class='" + card.toString() + "'></div>");
-					          }
-					        }
-			%>
-		</td>
-		<td>
-			<%
-				if (game.getState() == Game.State.TURNS) {
-					        if (player == me) {
-					          out.print(player.getScore());
-					        }
-					      } else {
-					        out.print(player.getScore());
-					      }
-			%>
-		</td>
-		<td>
-			<%
-				out.print(player.getStatus());
-			%>
-		</td>
-	</tr>
-	<%
+	String gameId = request.getParameter("id");
+	if (gameId == null) {
+		em.getTransaction().begin();
+		game = new Game();
+		System.out.print("ddddd");
+		em.persist(game);
+		em.flush();
+		em.getTransaction().commit();
+	} else {
+		game = em.find(Game.class, KeyFactory.stringToKey(gameId));
+	}
+
+	System.out.println("game:" + game);
+	System.out.println("game:" + game.getKeyAsString());
+
+	if (game == null) {
+		return;
+	}
+
+	String userId = currentUser.getUserId();
+	if (!game.getPlayerMap().containsKey(userId)) {
+		if (game.getPlayers().size() < 13) {
+			MessageService.sendToAllPlayers(game, "UPDATE");
+			Player p = new Player(currentUser.getNickname());
+			em.getTransaction().begin();
+			em.persist(p);
+			em.flush();
+			em.getTransaction().commit();
+			System.out.println("p:" + p.getKey());
+			game.joinPlayer(p);
 		}
-	%>
-</table>
-<div>
-	<%
-		if (game.getState() == Game.State.READY) {
-	%>
-	<h3>Remaining cards:</h3>
-	<%
-		for (Card card : game.getDeck()) {
-			        out.print("<div style='float:left' class='" + card.toString() + "'></div>");
-			      }
-			    }
-	%>
-</div>
-
-<%
-	if (game.getState() == Game.State.READY) {
-%>
-<script>
-	promptOpened = false;
-	$('#hit-me').attr("disabled", "disabled");
-	$('#stand').attr("disabled", "disabled");
-	$('.set-banker').removeAttr("disabled");
-<%if (me.isBanker()) {%>
-	$('#start-game').removeAttr("disabled");
-<%} else {%>
-	$('#start-game').attr("disabled", "disabled");
-<%}%>
-	
-</script>
-<%
-	} else if (game.getState() == Game.State.BETTING) {
-%>
-<script>
-	
-<%if (!me.isBanker()) {%>
-	askBet();
-<%}%>
-	$('#start-game').attr("disabled", "disabled");
-	$('.set-banker').attr("disabled", "disabled");
-	$('#hit-me').attr("disabled", "disabled");
-	$('#stand').attr("disabled", "disabled");
-</script>
-<%
-	} else if (game.getState() == Game.State.TURNS) {
-%>
-<script>
-	$('#start-game').attr("disabled", "disabled");
-	$('.set-banker').attr("disabled", "disabled");
-<%if (me.isTurn()) {%>
-	$('#hit-me').removeAttr("disabled");
-	$('#stand').removeAttr("disabled");
-<%} else {%>
-	$('#hit-me').attr("disabled", "disabled");
-	$('#stand').attr("disabled", "disabled");
-<%}%>
-	
-</script>
-<%
 	}
-%>
 
-<%
-	}
+	ChannelService channelService = ChannelServiceFactory
+			.getChannelService();
+	token = channelService.createChannel(game.getKey() + userId);
 %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Lucky 9</title>
+<script src='/_ah/channel/jsapi'></script>
+<script src="jquery.js"></script>
+<script>
+	var promptOpened = false;
+	var gameKey = '<%=game.getKeyAsString()%>'
+	function askBet() {
+		if (promptOpened == false) {
+			promptOpened = true;
+			var value = prompt("Bet: ");
+			$.post("command", {
+				command : "BET",
+				game : gameKey,
+				bet : value
+			}, function(data) {
+			});
+		}
+	}
+
+	$(document).ready(function() {
+// 		update();
+		$('#start-game').click(function() {
+			$.post("command", {
+				command : "START",
+				game : gameKey
+			}, function(data) {
+			});
+		});
+
+		$('#hit-me').click(function() {
+			$.post("command", {
+				command : "HIT_ME",
+				game : gameKey
+			}, function(data) {
+			});
+		});
+		$('#stand').click(function() {
+			$.post("command", {
+				command : "STAND",
+				game : gameKey
+			}, function(data) {
+			});
+		});
+		$('.set-banker').live("click", function() {
+			var btn = $(this);
+			$.post("command", {
+				command : "SET_BANKER",
+				ip : btn.data("ip"),
+				game : gameKey
+			}, function(data) {
+			});
+		});
+
+		initialize();
+	});
+
+	update = function() {
+		$.get("gamestate.jsp", function(data) {
+			$('#gameState').html(data);
+		});
+	};
+
+	onMessage = function(m) {
+		console.log(m);
+// 		update();
+	}
+
+	initialize = function() {
+		var token = '<%=token%>
+	';
+		var channel = new goog.appengine.Channel(token);
+		var handler = {
+			'onopen' : function(e) {
+				console.log("opened");
+			},
+			'onmessage' : onMessage,
+			'onerror' : function(e) {
+				console.log("error: " + e);
+			},
+			'onclose' : function(e) {
+				console.log("closed");
+			}
+		};
+		var socket = channel.open(handler);
+		socket.onmessage = onMessage;
+	}
+</script>
+<link href="index.css" rel="stylesheet">
+<link href="cards.css" rel="stylesheet">
+</head>
+<body>
+	<a href='game.jsp?id=<%=game.getKeyAsString()%>'>game.jsp?id=<%=game.getKeyAsString()%></a>
+	<div id="controls">
+		<button id="start-game">Start Game</button>
+		<button id="hit-me" style="margin: 0px 100px;">Hit Me!</button>
+		<button id="stand">Stand</button>
+	</div>
+	<div id="gameState"></div>
+</body>
+</html>

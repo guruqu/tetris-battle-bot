@@ -10,7 +10,6 @@ import javax.persistence.Entity;
  * 
  * @author Administrator
  */
-@Entity
 public enum Card {
 	HEARTS_1,
 	HEARTS_2,

@@ -17,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 
 /**
  * 
@@ -50,11 +51,11 @@ public class Game {
 
 	public void setBanker(Player player) {
 		if (state == State.READY && player.getBet() == 0) {
-			if (playerMap.containsKey(player.getIp())) {
+			if (playerMap.containsKey(player.getKeyAsString())) {
 				if (banker != null) {
 					banker.setBanker(false);
 				}
-				banker = playerMap.get(player.getIp());
+				banker = playerMap.get(player.getKeyAsString());
 				banker.setBanker(true);
 			}
 		}
@@ -65,9 +66,9 @@ public class Game {
 	}
 
 	public void joinPlayer(Player player) {
-		if (!playerMap.containsKey(player.getIp())) {
+		if (!playerMap.containsKey(player.getKeyAsString())) {
 			players.add(player);
-			playerMap.put(player.getIp(), player);
+			playerMap.put(player.getKeyAsString(), player);
 			if (players.size() == 1) {
 				setBanker(player);
 			}
@@ -80,7 +81,7 @@ public class Game {
 				banker = null;
 			}
 			players.remove(player);
-			playerMap.remove(player.getIp());
+			playerMap.remove(player.getKeyAsString());
 		}
 	}
 
@@ -187,5 +188,9 @@ public class Game {
 	
 	public Key getKey() {
 		return key;
+	}
+	
+	public String getKeyAsString(){
+		return KeyFactory.keyToString(key);
 	}
 }

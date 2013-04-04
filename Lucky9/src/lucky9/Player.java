@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 
 /**
  * 
@@ -31,11 +32,14 @@ public class Player {
 	private List<Card> cards = new ArrayList<Card>();
 	private boolean turn = false;
 	private Status status = Status.EVEN;
-	private String ip = "";
 
-	public Player(String name, String ip) {
+	
+	public Player() {
+		this.name = "player";
+	}
+	
+	public Player(String name) {
 		this.name = name;
-		this.ip = ip;
 	}
 
 	public void setCredit(int credit) {
@@ -44,10 +48,6 @@ public class Player {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getIp() {
-		return ip;
 	}
 
 	public boolean isTurn() {
@@ -125,5 +125,9 @@ public class Player {
 
 	public Key getKey() {
 		return key;
+	}
+	
+	public String getKeyAsString(){
+		return KeyFactory.keyToString(key);
 	}
 }

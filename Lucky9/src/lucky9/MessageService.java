@@ -11,7 +11,7 @@ public class MessageService {
 	public static void sendToAllPlayers(Game game, String message) {
 
 		for (Player player : game.getPlayers()) {
-			String channelKey = game.getKeyAsString() + "_" + player.getKeyAsString();
+			String channelKey = game.getId() + "_" + player.getId();
 			channelService.sendMessage(new ChannelMessage(channelKey, message));
 		}
 	}

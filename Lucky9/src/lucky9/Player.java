@@ -24,7 +24,7 @@ public class Player {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Key key;
+	private Long id;
 	private String name = "";
 	private boolean banker = false;
 	private int credit = 0;
@@ -123,11 +123,7 @@ public class Player {
 		WIN, LOSS, BETTING, READY, EVEN, HIT, STAND
 	}
 
-	public Key getKey() {
-		return key;
-	}
-	
-	public String getKeyAsString(){
-		return KeyFactory.keyToString(key);
+	public Long getId() {
+		return id;
 	}
 }

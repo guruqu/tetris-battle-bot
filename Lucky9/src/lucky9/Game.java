@@ -28,9 +28,9 @@ public class Game {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Key key;
+	private Long id;
 	private List<Player> players = new ArrayList<Player>();
-	private Map<String, Player> playerMap = new HashMap<String, Player>();
+	private Map<Long, Player> playerMap = new HashMap<Long, Player>();
 	private List<Card> deck = new ArrayList<Card>(40);
 	private Player currentPlayer = null;
 	private Player banker = null;
@@ -51,24 +51,24 @@ public class Game {
 
 	public void setBanker(Player player) {
 		if (state == State.READY && player.getBet() == 0) {
-			if (playerMap.containsKey(player.getKeyAsString())) {
+			if (playerMap.containsKey(player.getId())) {
 				if (banker != null) {
 					banker.setBanker(false);
 				}
-				banker = playerMap.get(player.getKeyAsString());
+				banker = playerMap.get(player.getId());
 				banker.setBanker(true);
 			}
 		}
 	}
 
-	public Map<String, Player> getPlayerMap() {
+	public Map<Long, Player> getPlayerMap() {
 		return playerMap;
 	}
 
 	public void joinPlayer(Player player) {
-		if (!playerMap.containsKey(player.getKeyAsString())) {
+		if (!playerMap.containsKey(player.getId())) {
 			players.add(player);
-			playerMap.put(player.getKeyAsString(), player);
+			playerMap.put(player.getId(), player);
 			if (players.size() == 1) {
 				setBanker(player);
 			}
@@ -81,7 +81,7 @@ public class Game {
 				banker = null;
 			}
 			players.remove(player);
-			playerMap.remove(player.getKeyAsString());
+			playerMap.remove(player.getId());
 		}
 	}
 
@@ -186,11 +186,7 @@ public class Game {
 		READY, BETTING, TURNS
 	}
 	
-	public Key getKey() {
-		return key;
-	}
-	
-	public String getKeyAsString(){
-		return KeyFactory.keyToString(key);
+	public Long getId() {
+		return id;
 	}
 }

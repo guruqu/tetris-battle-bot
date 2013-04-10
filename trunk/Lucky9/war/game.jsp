@@ -39,7 +39,7 @@
 	}
 
 	System.out.println("game:" + game);
-	System.out.println("game:" + game.getKeyAsString());
+	System.out.println("game:" + game.getId());
 
 	if (game == null) {
 		return;
@@ -54,14 +54,14 @@
 			em.persist(p);
 			em.flush();
 			em.getTransaction().commit();
-			System.out.println("p:" + p.getKey());
+			System.out.println("p:" + p.getId());
 			game.joinPlayer(p);
 		}
 	}
 
 	ChannelService channelService = ChannelServiceFactory
 			.getChannelService();
-	token = channelService.createChannel(game.getKey() + userId);
+	token = channelService.createChannel(game.getId() + userId);
 %>
 <!DOCTYPE html>
 <html>
@@ -72,14 +72,14 @@
 <script src="jquery.js"></script>
 <script>
 	var promptOpened = false;
-	var gameKey = '<%=game.getKeyAsString()%>'
+	var gameId = '<%=game.getId()%>'
 	function askBet() {
 		if (promptOpened == false) {
 			promptOpened = true;
 			var value = prompt("Bet: ");
 			$.post("command", {
 				command : "BET",
-				game : gameKey,
+				game : gameId,
 				bet : value
 			}, function(data) {
 			});
@@ -91,7 +91,7 @@
 		$('#start-game').click(function() {
 			$.post("command", {
 				command : "START",
-				game : gameKey
+				game : gameId
 			}, function(data) {
 			});
 		});
@@ -99,14 +99,14 @@
 		$('#hit-me').click(function() {
 			$.post("command", {
 				command : "HIT_ME",
-				game : gameKey
+				game : gameId
 			}, function(data) {
 			});
 		});
 		$('#stand').click(function() {
 			$.post("command", {
 				command : "STAND",
-				game : gameKey
+				game : gameId
 			}, function(data) {
 			});
 		});
@@ -115,7 +115,7 @@
 			$.post("command", {
 				command : "SET_BANKER",
 				ip : btn.data("ip"),
-				game : gameKey
+				game : gameId
 			}, function(data) {
 			});
 		});
@@ -158,7 +158,7 @@
 <link href="cards.css" rel="stylesheet">
 </head>
 <body>
-	<a href='game.jsp?id=<%=game.getKeyAsString()%>'>game.jsp?id=<%=game.getKeyAsString()%></a>
+	<a href='game.jsp?id=<%=game.getId()%>'>game.jsp?id=<%=game.getKeyAsString()%></a>
 	<div id="controls">
 		<button id="start-game">Start Game</button>
 		<button id="hit-me" style="margin: 0px 100px;">Hit Me!</button>

@@ -4,18 +4,25 @@
  */
 package nac.tbot;
 
+import javax.swing.Timer;
+
 /**
  *
  * @author nathaniel
  */
 public class BoardFrame extends javax.swing.JFrame {
 
-  private BoardWatcher boardWatcher;
+  private TPanel tPanel;
+  private Timer timer;
 
-  public void setBoardWatcher(BoardWatcher boardWatcher) {
-    this.boardWatcher = boardWatcher;
+  public void settPanel(TPanel tPanel) {
+    this.tPanel = tPanel;
   }
 
+  public void setTimer(Timer timer) {
+    this.timer = timer;
+  }
+  
   /**
    * Creates new form BoardFrame
    */
@@ -41,16 +48,21 @@ public class BoardFrame extends javax.swing.JFrame {
         formWindowClosing(evt);
       }
     });
+    addComponentListener(new java.awt.event.ComponentAdapter() {
+      public void componentHidden(java.awt.event.ComponentEvent evt) {
+        formComponentHidden(evt);
+      }
+    });
 
     javax.swing.GroupLayout measurePanel1Layout = new javax.swing.GroupLayout(measurePanel1);
     measurePanel1.setLayout(measurePanel1Layout);
     measurePanel1Layout.setHorizontalGroup(
       measurePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 179, Short.MAX_VALUE)
+      .addGap(0, 244, Short.MAX_VALUE)
     );
     measurePanel1Layout.setVerticalGroup(
       measurePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 360, Short.MAX_VALUE)
+      .addGap(0, 410, Short.MAX_VALUE)
     );
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -73,10 +85,13 @@ public class BoardFrame extends javax.swing.JFrame {
     pack();
   }// </editor-fold>//GEN-END:initComponents
 
+    private void formComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentHidden
+    }//GEN-LAST:event_formComponentHidden
+
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-      boardWatcher.setLoc(measurePanel1.getLocationOnScreen());
-      boardWatcher.setRun(true);
+      tPanel.setLoc(measurePanel1.getLocationOnScreen());
       setVisible(false);
+      timer.start();
     }//GEN-LAST:event_formWindowClosing
   /**
    * @param args the command line arguments

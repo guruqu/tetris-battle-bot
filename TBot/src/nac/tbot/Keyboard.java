@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 public class Keyboard {
 
   private Robot robot;
-  private int delay = 50;
+  private int delay;
 
   public Keyboard() {
     try {
@@ -40,17 +40,10 @@ public class Keyboard {
     robot.delay(delay);
   }
 
-  public void sendRotateClock() {
-    robot.keyPress(KeyEvent.VK_X);
+  public void sendRotate() {
+    robot.keyPress(KeyEvent.VK_UP);
     robot.delay(delay);
-    robot.keyRelease(KeyEvent.VK_X);
-    robot.delay(delay);
-  }
-  
-  public void sendRotateCounter() {
-    robot.keyPress(KeyEvent.VK_Z);
-    robot.delay(delay);
-    robot.keyRelease(KeyEvent.VK_Z);
+    robot.keyRelease(KeyEvent.VK_UP);
     robot.delay(delay);
   }
 

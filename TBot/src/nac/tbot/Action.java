@@ -17,7 +17,9 @@ public interface Action {
 
   public void sendRight();
 
-  public void sendRotate();
+  public void sendRotateRight();
+  
+  public void sendRotateLeft();
 
   public void sendShift();
 

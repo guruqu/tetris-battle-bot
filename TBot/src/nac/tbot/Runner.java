@@ -40,7 +40,6 @@ public class Runner extends javax.swing.JFrame {
     });
     action = new TetrisBattleAction();
     bot.setAction(action);
-    sight.setActive(true);
     jTabbedPane1.addTab("Sight", sight.getOption());
     jTabbedPane1.addTab("Action", action.getOption());
   }
@@ -103,11 +102,11 @@ public class Runner extends javax.swing.JFrame {
   }// </editor-fold>//GEN-END:initComponents
 
   private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
-    sight.setActive(true);
+
   }//GEN-LAST:event_formWindowLostFocus
 
   private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
-    sight.setActive(false);
+
   }//GEN-LAST:event_formWindowGainedFocus
 
   /**

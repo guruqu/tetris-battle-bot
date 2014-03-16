@@ -73,7 +73,7 @@ public class MeasureFrame extends javax.swing.JFrame {
 
   private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
     sight.setLocation(measurePanel1.getLocationOnScreen());
-//    sight.setActive(true);
+    sight.setActive(true);
   }//GEN-LAST:event_formWindowClosing
 
   private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened

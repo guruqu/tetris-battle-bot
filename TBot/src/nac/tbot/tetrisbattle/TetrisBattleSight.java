@@ -50,6 +50,7 @@ public class TetrisBattleSight implements Sight {
   private Robot robot;
   private Rectangle focus;
   private SightReactor sightReactor;
+  private boolean active = false;
 
   public TetrisBattleSight() {
     try {
@@ -60,9 +61,12 @@ public class TetrisBattleSight implements Sight {
     timer = new Timer(30, new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        visualize();
+        if (active) {
+          visualize();
+        }
       }
     });
+    timer.start();
   }
 
   @Override
@@ -85,8 +89,8 @@ public class TetrisBattleSight implements Sight {
         int np = getPieceIndex(new Color(rgb));
         if (np != 0 && sightReactor != null) {
           sightReactor.newPiece(np);
-          return; 
-       }
+          return;
+        }
 
       }
 
@@ -144,11 +148,7 @@ public class TetrisBattleSight implements Sight {
 
   @Override
   public void setActive(boolean active) {
-    if (active) {
-      timer.start();
-    } else {
-      timer.stop();
-    }
+    this.active = active;
   }
 
   public static int getPieceIndex(Color rgb) {

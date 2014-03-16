@@ -10,6 +10,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
+import javax.swing.JLabel;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -21,7 +22,7 @@ public class TPanel extends JPanel {
   private Robot robot;
   private Rectangle rect;
   private TState state = TState.STANDBY;
-  private Keyboard keyboard = new Keyboard();
+  private final Keyboard keyboard = new Keyboard();
   private BotImpl bot = new BotImpl();
   private Color newPieceColor;
   private int hold = -1;
@@ -32,6 +33,7 @@ public class TPanel extends JPanel {
   private JTextField towerGapTextField;
   private JTextField buildLimitTextField;
   private JTextField breakLimitTextField;
+  private JLabel statusArea;
 
   public TPanel() {
     try {
@@ -199,6 +201,9 @@ public class TPanel extends JPanel {
       }
 
     }
+    if (!statusArea.getText().equals(state.toString())) {
+      statusArea.setText(state.toString());
+    }
   }
 
   @Override
@@ -239,13 +244,7 @@ public class TPanel extends JPanel {
     this.breakLimitTextField = breakLimitTextField;
   }
 
-  public static void main(String[] args) {
-    int lightBlack = new Color(47, 47, 47).getRGB();
-    System.out.println("" + lightBlack);
-    int lightestBlack = new Color(77, 77, 77).getRGB();
-    System.out.println("" + lightestBlack);
-    int darkBlack = new Color(43, 43, 43).getRGB();
-    System.out.println("" + darkBlack);
-
+  public void setStatusArea(JLabel statusArea) {
+    this.statusArea = statusArea;
   }
 }

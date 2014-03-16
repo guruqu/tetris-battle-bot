@@ -12,7 +12,7 @@ public class Move {
 
   private int rotation = 0;
   private int column = 0;
-  private Tetramino tetramino;
+  private final Tetramino tetramino;
   private int rowsRemoved = 0;
   private boolean gameOver = false;
   private int landingHeight = 0;

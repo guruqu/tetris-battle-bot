@@ -47,10 +47,18 @@ public class TetrisBattleAction implements Action {
   }
 
   @Override
-  public void sendRotate() {
+  public void sendRotateRight() {
     robot.keyPress(KeyEvent.VK_UP);
     robot.delay(delay);
     robot.keyRelease(KeyEvent.VK_UP);
+    robot.delay(delay);
+  }
+
+  @Override
+  public void sendRotateLeft() {
+    robot.keyPress(KeyEvent.VK_Z);
+    robot.delay(delay);
+    robot.keyRelease(KeyEvent.VK_Z);
     robot.delay(delay);
   }
 
@@ -72,11 +80,10 @@ public class TetrisBattleAction implements Action {
 
   @Override
   public JPanel getOption() {
-   if(actionOptionPanel == null){
-     actionOptionPanel = new ActionOptionPanel(this);
-   }
-   return actionOptionPanel;
+    if (actionOptionPanel == null) {
+      actionOptionPanel = new ActionOptionPanel(this);
+    }
+    return actionOptionPanel;
   }
-  
-  
+
 }

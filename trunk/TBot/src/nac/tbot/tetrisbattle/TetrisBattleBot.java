@@ -9,7 +9,7 @@ import nac.tbot.TetraminoFactory;
 
 public class TetrisBattleBot implements Bot {
 
-   private Action action = null;
+  private Action action = null;
   private final int BUILDUP = 1;
   private final int BREAKDOWN = 2;
   private int phase = BUILDUP;
@@ -55,9 +55,13 @@ public class TetrisBattleBot implements Bot {
 
           int rotation = finalMove.getRotation();
 
-          while (rotation > 0) {
-            action.sendRotate();
-            rotation--;
+          if (rotation == 3) {
+            action.sendRotateLeft();
+          } else {
+            while (rotation > 0) {
+              action.sendRotateRight();
+              rotation--;
+            }
           }
 
           int column = finalMove.getColumn();

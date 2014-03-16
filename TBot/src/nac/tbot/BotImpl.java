@@ -10,7 +10,7 @@ public class BotImpl implements Bot {
   private int towerGap;
 
   @Override
-  public Move move(Board board, int currentMino, boolean lrc) {
+  public Move move(Board board, int currentMino) {
     double best_evaluation = -100000;
     double evaluation;
     Move best_move1 = null;
@@ -37,13 +37,7 @@ public class BotImpl implements Bot {
         Board newBoard1 = board.apply(move1);
         if (!move1.isGameOver()) {
 
-
-//          if (phase == BUILDUP) {
-            evaluation = newBoard1.evaluate() + move1.evaluate();
-//          } else {
-//            evaluation = newBoard1.evaluate() + move1.evaluate(board.getBoardHeight(), lrc, breakDownLimit);
-//          }
-
+          evaluation = newBoard1.evaluate() + move1.evaluate();
 
           if (evaluation > best_evaluation) {
             best_evaluation = evaluation;
@@ -71,7 +65,8 @@ public class BotImpl implements Bot {
   public void setTowerGap(int towerGap) {
     this.towerGap = towerGap;
   }
-//  public int getPhase() {
-//    return phase;
-//  }
+  
+  public int getPhase() {
+    return phase;
+  }
 }

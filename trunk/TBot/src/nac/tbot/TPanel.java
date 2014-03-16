@@ -17,16 +17,13 @@ import javax.swing.JTextField;
 public class TPanel extends JPanel {
 
   public final Dimension d = new Dimension(10 * 18, 20 * 18);
-  private final int lightBlack = new Color(47, 47, 47).getRGB();
-  private final int lightestBlack = new Color(77, 77, 77).getRGB();
-  private final int darkBlack = new Color(43, 43, 43).getRGB();
 
   private Robot robot;
   private Rectangle rect;
   private TState state = TState.STANDBY;
   private Keyboard keyboard = new Keyboard();
   private BotImpl bot = new BotImpl();
-  private int newPieceRGB;
+  private Color newPieceColor;
   private int hold = -1;
   private int current = -1;
   private boolean pressedShift = false;
@@ -84,8 +81,8 @@ public class TPanel extends JPanel {
 
           int rgb = image.getRGB(px, py);
 
-          if (rgb == lightBlack || rgb == darkBlack
-                  || rgb == lightestBlack) {
+          System.out.println("TetraminoFactory.getIndexByRBG(new Color(rgb))" + TetraminoFactory.getIndexByRBG(new Color(rgb)));
+          if (TetraminoFactory.getIndexByRBG(new Color(rgb)) == -1) {
             g2d.setColor(Color.white);
             int rx = j * gridWidth - 13;
             int ry = i * gridHeight - 13;
@@ -101,7 +98,7 @@ public class TPanel extends JPanel {
 
             if (i == 1 && (state == TState.STARTED || state == TState.WAIT_FOR_PIECE)) {
               state = TState.SENDING_PIECE;
-              newPieceRGB = rgb;
+              newPieceColor = new Color(rgb);
             }
 
           }
@@ -127,7 +124,7 @@ public class TPanel extends JPanel {
       bot.setBreakDownLimit(Integer.parseInt(breakLimitTextField.getText()));
     }
     if (state == TState.SENDING_PIECE) {
-      current = TetraminoFactory.getIndexByRBG(newPieceRGB);
+      current = TetraminoFactory.getIndexByRBG(newPieceColor);
 
       if (current != -1) {
 
@@ -140,11 +137,11 @@ public class TPanel extends JPanel {
           Move move1;
           Move move2;
           Move finalMove;
-          boolean lrc = lastRowsRemoved > 0;
+
           if (pressedShift == false) {
 
-            move1 = bot.move(new Board(board, 19, 10), current, lrc);
-            move2 = bot.move(new Board(board, 19, 10), hold, lrc);
+            move1 = bot.move(new Board(board, 19, 10), current);
+            move2 = bot.move(new Board(board, 19, 10), hold);
 
             if (move1 != null && move2 != null && move1.getScore() >= move2.getScore()) {
               finalMove = move1;
@@ -157,7 +154,7 @@ public class TPanel extends JPanel {
               finalMove = move2;
             }
           } else {
-            finalMove = bot.move(new Board(board, 19, 10), current, lrc);
+            finalMove = bot.move(new Board(board, 19, 10), current);
           }
 
           if (finalMove != null) {
@@ -240,5 +237,15 @@ public class TPanel extends JPanel {
 
   public void setBreakLimitTextField(JTextField breakLimitTextField) {
     this.breakLimitTextField = breakLimitTextField;
+  }
+
+  public static void main(String[] args) {
+    int lightBlack = new Color(47, 47, 47).getRGB();
+    System.out.println("" + lightBlack);
+    int lightestBlack = new Color(77, 77, 77).getRGB();
+    System.out.println("" + lightestBlack);
+    int darkBlack = new Color(43, 43, 43).getRGB();
+    System.out.println("" + darkBlack);
+
   }
 }

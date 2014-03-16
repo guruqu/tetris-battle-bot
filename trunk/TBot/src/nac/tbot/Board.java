@@ -4,7 +4,9 @@
  */
 package nac.tbot;
 
+import java.awt.Color;
 import java.util.Arrays;
+import nac.tbot.tetrisbattle.TGridPanel;
 
 /**
  *
@@ -175,7 +177,7 @@ public class Board {
     }
     return rows;
   }
-  
+
   public int getTowerHeight() {
     int towerHeight = 0;
     for (int i = 0; i < data.length; i++) {
@@ -220,7 +222,7 @@ public class Board {
     return new Board(bdata, rows, columns);
   }
 
-    public double evaluate() {
+  public double evaluate() {
     return (double) getRowTransitions() * -3.2178882868487753
             + (double) getColumnTransitions() * -9.348695305445199
             + (double) getHoles() * -7.899265427351652
@@ -240,5 +242,35 @@ public class Board {
       }
     }
     return 0;
+  }
+
+  @Override
+  public String toString() {
+
+    StringBuilder sb = new StringBuilder();
+
+    for (int i = rows - 1; i >= 0; i--) {
+      int row = data[i];
+      for (int j = 0; j < columns; j++) {
+        if (TGridPanel.getBit(row, j) == 1) {
+          sb.append("1");
+        } else {
+          sb.append("0");
+        }
+      }
+      sb.append("\n");
+    }
+
+    return sb.toString();
+  }
+
+  public boolean compare(Board board) {
+    int[] data2 = board.getData();
+    for (int i = 0; i < rows; i++) {
+      if (data[i] != data2[i]) {
+        return false;
+      }
+    }
+    return true;
   }
 }

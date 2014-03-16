@@ -1,24 +1,28 @@
-package nac.tbot;
+package nac.tbot.tetrisbattle;
 
+import nac.tbot.Action;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JPanel;
 
-public class Keyboard {
+public class TetrisBattleAction implements Action {
 
   private Robot robot;
-  private int delay;
+  private int delay = 50;
+  private ActionOptionPanel actionOptionPanel;
 
-  public Keyboard() {
+  public TetrisBattleAction() {
     try {
       robot = new Robot();
     } catch (AWTException ex) {
-      Logger.getLogger(Keyboard.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(TetrisBattleAction.class.getName()).log(Level.SEVERE, null, ex);
     }
   }
 
+  @Override
   public void sendSpace() {
     robot.keyPress(KeyEvent.VK_SPACE);
     robot.delay(delay);
@@ -26,6 +30,7 @@ public class Keyboard {
     robot.delay(delay);
   }
 
+  @Override
   public void sendLeft() {
     robot.keyPress(KeyEvent.VK_LEFT);
     robot.delay(delay);
@@ -33,6 +38,7 @@ public class Keyboard {
     robot.delay(delay);
   }
 
+  @Override
   public void sendRight() {
     robot.keyPress(KeyEvent.VK_RIGHT);
     robot.delay(delay);
@@ -40,6 +46,7 @@ public class Keyboard {
     robot.delay(delay);
   }
 
+  @Override
   public void sendRotate() {
     robot.keyPress(KeyEvent.VK_UP);
     robot.delay(delay);
@@ -47,6 +54,7 @@ public class Keyboard {
     robot.delay(delay);
   }
 
+  @Override
   public void sendShift() {
     robot.keyPress(KeyEvent.VK_SHIFT);
     robot.delay(delay);
@@ -60,6 +68,14 @@ public class Keyboard {
 
   public void setDelay(int delay) {
     this.delay = delay;
+  }
+
+  @Override
+  public JPanel getOption() {
+   if(actionOptionPanel == null){
+     actionOptionPanel = new ActionOptionPanel(this);
+   }
+   return actionOptionPanel;
   }
   
   

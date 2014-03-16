@@ -10,7 +10,7 @@ import javax.swing.Timer;
  *
  * @author nathaniel
  */
-public class BoardFrame extends javax.swing.JFrame {
+public class MeasureFrame extends javax.swing.JFrame {
 
   private TPanel tPanel;
   private Timer timer;
@@ -26,7 +26,7 @@ public class BoardFrame extends javax.swing.JFrame {
   /**
    * Creates new form BoardFrame
    */
-  public BoardFrame() {
+  public MeasureFrame() {
     initComponents();
     setResizable(false);
   }

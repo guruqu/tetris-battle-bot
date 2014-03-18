@@ -10,8 +10,6 @@ package nac.tbot;
  */
 public interface Bot {
 
-  public void setAction(Action action);
-  
-  public void newPiece(Board board, int currentMino);
+  public Move move(Board board, int currentMino);
   
 }

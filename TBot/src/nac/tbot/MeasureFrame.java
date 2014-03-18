@@ -1,25 +1,32 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package nac.tbot.tetrisbattle;
+package nac.tbot;
+
+import javax.swing.Timer;
 
 /**
  *
- * @author user
+ * @author nathaniel
  */
 public class MeasureFrame extends javax.swing.JFrame {
-  
-  private final TetrisBattleSight sight;
 
+  private TPanel tPanel;
+  private Timer timer;
+
+  public void settPanel(TPanel tPanel) {
+    this.tPanel = tPanel;
+  }
+
+  public void setTimer(Timer timer) {
+    this.timer = timer;
+  }
+  
   /**
-   * Creates new form MeasureFrame
-   *
-   * @param sight
+   * Creates new form BoardFrame
    */
-  public MeasureFrame(TetrisBattleSight sight) {
-    this.sight = sight;
+  public MeasureFrame() {
     initComponents();
     setResizable(false);
   }
@@ -33,14 +40,17 @@ public class MeasureFrame extends javax.swing.JFrame {
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
 
-    measurePanel1 = new nac.tbot.tetrisbattle.TGridPanel();
+    measurePanel1 = new nac.tbot.MeasurePanel();
 
+    setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
     addWindowListener(new java.awt.event.WindowAdapter() {
       public void windowClosing(java.awt.event.WindowEvent evt) {
         formWindowClosing(evt);
       }
-      public void windowOpened(java.awt.event.WindowEvent evt) {
-        formWindowOpened(evt);
+    });
+    addComponentListener(new java.awt.event.ComponentAdapter() {
+      public void componentHidden(java.awt.event.ComponentEvent evt) {
+        formComponentHidden(evt);
       }
     });
 
@@ -48,40 +58,45 @@ public class MeasureFrame extends javax.swing.JFrame {
     measurePanel1.setLayout(measurePanel1Layout);
     measurePanel1Layout.setHorizontalGroup(
       measurePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 179, Short.MAX_VALUE)
+      .addGap(0, 244, Short.MAX_VALUE)
     );
     measurePanel1Layout.setVerticalGroup(
       measurePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 360, Short.MAX_VALUE)
+      .addGap(0, 410, Short.MAX_VALUE)
     );
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(measurePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+      .addGroup(layout.createSequentialGroup()
+        .addContainerGap()
+        .addComponent(measurePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addContainerGap())
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
-        .addComponent(measurePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addGap(0, 0, Short.MAX_VALUE))
+        .addContainerGap()
+        .addComponent(measurePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addContainerGap())
     );
 
     pack();
   }// </editor-fold>//GEN-END:initComponents
 
-  private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-    sight.setLocation(measurePanel1.getLocationOnScreen());
-    sight.setActive(true);
-  }//GEN-LAST:event_formWindowClosing
+    private void formComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentHidden
+    }//GEN-LAST:event_formComponentHidden
 
-  private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-    sight.setActive(false);
-  }//GEN-LAST:event_formWindowOpened
-
-
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+      tPanel.setLoc(measurePanel1.getLocationOnScreen());
+      setVisible(false);
+      timer.start();
+    }//GEN-LAST:event_formWindowClosing
+  /**
+   * @param args the command line arguments
+   */
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private nac.tbot.tetrisbattle.TGridPanel measurePanel1;
+  private nac.tbot.MeasurePanel measurePanel1;
   // End of variables declaration//GEN-END:variables
 }
